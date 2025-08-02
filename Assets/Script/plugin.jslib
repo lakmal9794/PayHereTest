@@ -1,12 +1,17 @@
 mergeInto(LibraryManager.library, {
   StartPayHerePayment: function () {
-    // Define payment object inside JS
+    // Ensure PayHere script is already loaded before calling
+    if (typeof payhere === "undefined") {
+      console.error("PayHere library not loaded!");
+      return;
+    }
+
     var payment = {
       "sandbox": true,
       "merchant_id": "1231476",
       "return_url": undefined,
       "cancel_url": undefined,
-      "notify_url": "http://sample.com/notify",
+      "notify_url": undefined,
       "order_id": "ItemNo12345",
       "items": "Door bell wireless",
       "amount": "1000.00",
@@ -26,7 +31,6 @@ mergeInto(LibraryManager.library, {
       "custom_2": ""
     };
 
-    // Events
     payhere.onCompleted = function (orderId) {
       console.log("Payment completed. OrderID:" + orderId);
     };
@@ -39,7 +43,6 @@ mergeInto(LibraryManager.library, {
       console.log("Error:" + error);
     };
 
-    // Start payment popup
     payhere.startPayment(payment);
   }
 });
